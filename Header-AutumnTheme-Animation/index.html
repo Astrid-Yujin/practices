@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>Autumn Header</title>
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    .img-list {
+        width: 100%;
+        min-width: 1000px;
+        height: 150px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .img-list .layer {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+
+<body>
+    <section class="img-list">
+        <div class="layer">
+            <img width="3000" height="250" src="./assets/images/1.png" alt="background" />
+        </div>
+        <div class="layer">
+            <img width="1800" height="165" src="./assets/images/2_1.png" alt="little girl - open eye" />
+        </div>
+        <div class="layer">
+            <img width="3000" height="250" src="./assets/images/3.png" alt="right side hill" />
+        </div>
+        <div class="layer">
+            <img width="1800" height="165" src="./assets/images/5.png" alt="gril drinking tee" />
+        </div>
+        <div class="layer">
+            <img width="1950" height="178" src="./assets/images/6.png" alt="left side leaves" />
+        </div>
+        <div class="layer">
+            <img width="1800" height="150" src="./assets/images/4.png" alt="front leaves" />
+        </div>
+    </section>
+</body>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.10.0/jquery.js"></script>
+<script>
+    const imgList = $(".img-list .layer img");
+    const defaultStyles = [{
+        translateX: 0,
+        translateY: 0,
+        blur: 3,
+    }, {
+        translateX: 0,
+        translateY: 0,
+        blur: 0,
+    }, {
+        translateX: -50,
+        translateY: 0,
+        blur: 2,
+    }, {
+        translateX: 0,
+        translateY: 0,
+        blur: 5,
+    }, {
+        translateX: 0,
+        translateY: 0,
+        blur: 6,
+    }, {
+        translateX: 0,
+        translateY: 0,
+        blur: .5,
+    } ];
+
+    function setDefaultImgStyle() {
+        for (let i = 0; i < imgList.length; i++) {
+            const imgItem = imgList[i];
+            const defaultStyle = defaultStyles[i];
+            const {
+                translateX,
+                translateY,
+                blur
+            } = defaultStyle;
+            // Set position offset and Gaussian blur
+            $(imgItem).css({
+                // Position offset
+                transform: `translate(${translateX}px, ${translateY}px)`,
+                // Gaussian blur
+                filter: `blur(${blur}px)`,
+            });
+        }
+    }
+    setDefaultImgStyle();
+
+    function setWinkAnimation() {
+        // Target the second image of the little girl
+        const imgGirl = $(".img-list .layer:nth-child(2) img");
+
+        // wink every 5 seconds
+        setInterval(() => {
+            // half close eye
+            $(imgGirl).attr("src", "./assets/images/2_2.png");
+
+            // close eye after 100ms
+            setTimeout(() => {
+                $(imgGirl).attr("src", "./assets/images/2_3.png");
+            }, 100);
+
+            // half open eye after 300ms
+            setTimeout(() => {
+                $(imgGirl).attr("src", "./assets/images/2_2.png");
+            }, 300);
+
+            // open eye after 400ms
+            setTimeout(() => {
+                $(imgGirl).attr("src", "./assets/images/2_1.png");
+            }, 400);
+        }, 5000);
+    }
+    setWinkAnimation();
+
+    // Position and Gaussian blur after mouse move towards left
+    const leftStyles = [{
+        translateX: 0,
+        translateY: 0,
+        blur: 0,
+    }, {
+        translateX: -9,
+        translateY: 0,
+        blur: 5,
+    }, {
+        translateX: -80,
+        translateY: 0,
+        blur: -5,
+    }, {
+        translateX: -78,
+        translateY: 0,
+        blur: 14,
+    }, {
+        translateX: -97,
+        translateY: 0,
+        blur: -10,
+    }, {
+        translateX: -36,
+        translateY: 0,
+        blur: 10,
+    } ];
+
+    function setLeftImgStyle(offsetRatio) {
+        for (let i = 0; i < imgList.length; i++) {
+            const imgItem = imgList[i];
+            const {
+                translateX: defaultTranslateX,
+                translateY: defaultTranslateY,
+                blur: defaultBlur,
+            } = defaultStyles[i];
+            const leftStyle = leftStyles[i];
+            // Calculate position offset and Gaussian blur according to move distance
+            const translateX =
+                (leftStyle.translateX - defaultTranslateX) * offsetRatio +
+                defaultTranslateX;
+            const blur = (leftStyle.blur - defaultBlur) * offsetRatio + defaultBlur;
+
+            // Set position offset and Gaussian blur
+            $(imgItem).css({
+                // Set position offset and
+                transform: `translate(${translateX}px, ${defaultTranslateY}px)`,
+                // Set Gaussian blur
+                filter: `blur(${blur}px)`,
+            });
+        }
+    }
+
+    // Position and Gaussian blur after mouse move towards right
+    const rightStyles = [{
+        translateX: 0,
+        translateY: 0,
+        blur: 8,
+    }, {
+        translateX: 9,
+        translateY: 0,
+        blur: 5,
+    }, {
+        translateX: 21,
+        translateY: 0,
+        blur: 4,
+    }, {
+        translateX: 77,
+        translateY: -50,
+        blur: -5,
+    }, {
+        translateX: 96,
+        translateY: 0,
+        blur: [0, 4],
+    }, {
+        translateX: 35,
+        translateY: 0,
+        blur: 10,
+    } ];
+
+    function setRightImgStyle(offsetRatio) {
+        for (let i = 0; i < imgList.length; i++) {
+            const imgItem = imgList[i];
+            const {
+                translateX: defaultTranslateX,
+                translateY: defaultTranslateY,
+                blur: defaultBlur,
+            } = defaultStyles[i];
+            const rightStyle = rightStyles[i];
+            let rightBlur = rightStyle.blur;
+            let blur = defaultBlur;
+            // Calculate position offset and Gaussian blur according to move distance
+            const translateX =
+                (rightStyle.translateX - defaultTranslateX) * offsetRatio +
+                defaultTranslateX;
+            const translateY =
+                (rightStyle.translateY - defaultTranslateY) * offsetRatio +
+                defaultTranslateY;
+            if (Array.isArray(rightBlur)) {
+                const targetBlur = offsetRatio < 0.5 ? rightBlur[0] : rightBlur[1];
+                const ratio =
+                    offsetRatio < 0.5 ? offsetRatio * 2 : (offsetRatio - 0.5) * 2;
+                const currentBlur = offsetRatio < 0.5 ? defaultBlur : rightBlur[0];
+                blur = (targetBlur - currentBlur) * ratio + currentBlur;
+            } else {
+                blur = (rightBlur - defaultBlur) * offsetRatio + defaultBlur;
+            }
+            // Set position offset and Gaussian blur
+            $(imgItem).css({
+                // Set position offset
+                transform: `translate(${translateX}px, ${translateY}px)`,
+                // Set Gaussian blur
+                filter: `blur(${blur}px)`,
+            });
+        }
+    }
+
+    // Screen width
+    const width = document.body.clientWidth;
+    // Mouse enter event
+    $(".img-list").mouseenter((e) => {
+        // Reset position and blur and remove event listening when mouse leave
+        $(".img-list").mouseleave(() => {
+            setDefaultImgStyle();
+            $(".img-list").off("mousemove");
+            $(".img-list").off("mouseleave");
+        });
+
+        // Record start mouse position 
+        const originalX = e.pageX;
+        $(".img-list").mousemove((e) => {
+            // Record mouse position when mouse moves
+            const currentX = e.pageX;
+            // Calculate ratio according to move distance and screen width
+            const offsetRatio = (currentX - originalX) / width;
+            // Mouse move left
+            if (offsetRatio < 0) {
+                setLeftImgStyle(Math.abs(offsetRatio));
+                // Mouse move right
+            } else {
+                setRightImgStyle(offsetRatio);
+            }
+        });
+    });
+</script>
+
+</html>
